@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy – Smart Clipboard Manager</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-muted: #94a3b8;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        .navbar {
+            background: rgba(15, 23, 42, 0.9) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            color: #fff !important;
+        }
+        .policy-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 6rem 1rem 4rem;
+        }
+        .policy-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38bdf8, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        p, li {
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+        a {
+            color: #818cf8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .badge {
+            background: rgba(99,102,241,0.15);
+            color: #a5b4fc;
+            border-radius: 20px;
+            padding: 0.25rem 1rem;
+        }
+        footer {
+            background: rgba(0,0,0,0.3);
+            padding: 2rem 0;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">📋 Smart Clipboard</a>
+        <div class="ms-auto">
+            <a class="nav-link d-inline" href="index.html">← Back to Home</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Privacy Policy Content -->
+<div class="policy-container">
+    <h1>Privacy Policy</h1>
+    <p class="text-center text-muted">Last updated: June 14, 2026</p>
+
+    <div class="policy-card">
+        <p>Your privacy is critically important to us. This policy explains how <strong>Smart Clipboard Manager</strong> ("the Extension") handles your data.</p>
+
+        <h2>1. Data Collection & Storage</h2>
+        <p>The Extension stores <strong>clipboard history</strong> locally on your device using <code>chrome.storage.local</code>. This includes:</p>
+        <ul>
+            <li>Text you copy from web pages, input fields, and textareas.</li>
+            <li>Timestamps associated with each copied item.</li>
+        </ul>
+        <p><strong>We do not collect, transmit, or share this data with any external server.</strong> All history remains entirely on your machine.</p>
+
+        <h2>2. Optional Feedback & Discord Integration</h2>
+        <p>If you choose to submit feedback (after 50 uses or 7 days, via the in‑popup card), the following information is <strong>voluntarily</strong> sent to a Discord webhook:</p>
+        <ul>
+            <li>Your star rating (1‑5).</li>
+            <li>Your feedback message.</li>
+            <li>An optional email address (only if you provide one).</li>
+            <li>Browser information (user agent).</li>
+            <li>Extension version.</li>
+            <li>Submission timestamp.</li>
+        </ul>
+        <p>This data is used solely to improve the Extension and is stored on Discord's servers (see Discord's privacy policy). No other data is shared.</p>
+
+        <h2>3. Permissions Justification</h2>
+        <p>The Extension requires the following permissions for full functionality:</p>
+        <ul>
+            <li><strong>storage</strong> – to save clipboard history locally.</li>
+            <li><strong>clipboardRead</strong> – to read the current system clipboard when you click "Import from clipboard".</li>
+            <li><strong>clipboardWrite</strong> – to copy saved items back to your clipboard.</li>
+            <li><strong>offscreen</strong> – (optional) to keep the background service worker alive for uninterrupted capture.</li>
+            <li><strong>host_permissions <code>&lt;all_urls&gt;</code></strong> – to detect copy events on any website you visit.</li>
+            <li><strong>activeTab</strong> – to enable/disable capture on the current tab.</li>
+        </ul>
+        <p>None of these permissions are used to track or monitor your browsing activity.</p>
+
+        <h2>4. Your Control Over Data</h2>
+        <ul>
+            <li><strong>Delete individual items</strong> – click the 🗑️ button on any history card.</li>
+            <li><strong>Clear all history</strong> – use the "Clear All" button with confirmation.</li>
+            <li><strong>Disable capture per tab</strong> – toggle off the current tab in the popup.</li>
+            <li><strong>Global master switch</strong> – instantly stop all clipboard capturing across all tabs.</li>
+        </ul>
+        <p>All controls are available directly in the Extension popup.</p>
+
+        <h2>5. Data Retention</h2>
+        <p>Clipboard history is stored indefinitely until you delete it manually or clear all history. Feedback submissions are retained on Discord as per Discord's data retention policies.</p>
+
+        <h2>6. Third‑Party Services</h2>
+        <p>The Extension uses <strong>Discord</strong> solely for optional feedback collection. Discord's privacy policy applies to any data you submit through that channel. No other third‑party services, analytics, or advertising networks are used.</p>
+
+        <h2>7. Children's Privacy</h2>
+        <p>The Extension is not directed to children under 13, and we do not knowingly collect personal information from children.</p>
+
+        <h2>8. Changes to This Policy</h2>
+        <p>We may update this privacy policy from time to time. Changes will be posted on this page with an updated revision date.</p>
+
+        <h2>9. Contact Us</h2>
+        <p>If you have any questions or concerns about this privacy policy, please contact us:</p>
+        <p>📧 <a href="mailto:brijeshverma8896@gmail.com">support@smartclipboard.com</a></p>
+        <p>💬 <a href="#">Join our Discord</a></p>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <p class="mb-0">© 2026 Smart Clipboard Manager. Built with ❤️ for privacy‑focused users.</p>
+    </div>
+</footer>
+
+</body>
+</html>
