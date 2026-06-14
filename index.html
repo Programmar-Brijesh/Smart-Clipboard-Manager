@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Clipboard Manager — Chrome Extension</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.9) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff !important;
+        }
+
+        .hero-section {
+            padding: 6rem 0 4rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38bdf8, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 2.5rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+            color: white;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #e2e8f0, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .how-to-step {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .faq-answer {
+            padding: 0 1rem 1rem;
+            color: #94a3b8;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem 0;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .badge-custom {
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            font-weight: 500;
+            border-radius: 20px;
+            padding: 0.25rem 1rem;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+        }
+    </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="70">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <span><a class="navbar-brand" href="#"><img style="border-radius: 10px;" src="icon128.png" height="50px"
+                        alt=""> Smart Clipboard</a></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-to-use">How to Use</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#support">Support</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero / Home -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col-sm-6">
+                    <h1 class="hero-title">Smart Clipboard Manager</h1>
+                    <p class="hero-subtitle">200‑item history, instant search, and complete privacy – all inside your
+                        browser.</p>
+                    <a href="#" class="btn btn-primary-custom btn-lg">Get Extension (Coming to Chrome Web Store)</a>
+                    <p class="mt-4"><span class="badge-custom">Manifest V3</span> <span class="badge-custom mx-2">100%
+                            Local</span> <span class="badge-custom">Free & Secure</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <img src="2.png" height="280px" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-2">
+        <div class="container">
+            <h2 class="section-title">✨ Features</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <h5>Auto‑Capture Every Copy</h5>
+                        <p class="text">Works on any website, including input fields & iframes. No duplicates,
+                            case‑insensitive detection.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h5>Instant Search</h5>
+                        <p class="text">Filter your clipboard history in real time. Find that exact text you copied days
+                            ago.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">📎</div>
+                        <h5>One‑Click Copy Back</h5>
+                        <p class="text">Click any card to copy its text to the system clipboard again – with a subtle
+                            “Copied!” feedback.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🗑️</div>
+                        <h5>Delete & Clear All</h5>
+                        <p class="text">Remove single items with the dustbin icon, or wipe the whole history after a
+                            confirmation modal.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🕒</div>
+                        <h5>Recent 5 & Import</h5>
+                        <p class="text">Quickly view the last 5 copies, or manually import your current system
+                            clipboard.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h5>Privacy Controls</h5>
+                        <p class="text">Disable capture on any specific tab, or toggle a global master switch to stop
+                            all recording instantly.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h5>Persistent Background</h5>
+                        <p class="text">Service worker stays alive from Chrome start to close – never misses a copy
+                            event.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h5>Polite Feedback</h5>
+                        <p class="text">Non‑intrusive rating card appears only after 50 uses or 7 days – never annoying.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h5>Premium Dark UI</h5>
+                        <p class="text">Modern gradient design, smooth animations, and responsive layout – a pleasure to
+                            use.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use -->
+    <section id="how-to-use" class="py-5">
+        <div class="container">
+            <h2 class="section-title">📖 How to Use</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="how-to-step">
+                        <h5>1️⃣ Install the extension</h5>
+                        <p class="mb-0">Download from Chrome Web Store or load unpacked in Developer mode.</p>
+                    </div>
+                    <div class="how-to-step">
+                        <h5>2️⃣ Copy anything</h5>
+                        <p class="mb-0">Select text on any page and press <kbd>Ctrl+C</kbd> – it’s automatically saved.
+                        </p>
+                    </div>
+                    <div class="how-to-step">
+                        <h5>3️⃣ Open the popup</h5>
+                        <p class="mb-0">Click the extension icon to see your history, search, or re‑copy items.</p>
+                    </div>
+                    <div class="how-to-step">
+                        <h5>4️⃣ Manage your history</h5>
+                        <p class="mb-0">Click a card to copy, use the dustbin icon to delete, or clear all with the
+                            button.</p>
+                    </div>
+                    <div class="how-to-step">
+                        <h5>5️⃣ Toggle privacy modes</h5>
+                        <p class="mb-0">Use the per‑tab switch to ignore the current page, or the global switch to pause
+                            all capture.</p>
+                    </div>
+                    <div class="how-to-step">
+                        <h5>6️⃣ Share feedback (optional)</h5>
+                        <p class="mb-0">When the feedback card appears, rate your experience and help us improve.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support -->
+    <section id="support" class="py-5">
+        <div class="container">
+            <h2 class="section-title">🛟 Support</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h5 class="mb-3">Frequently Asked Questions</h5>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Is my data safe?</span><span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Absolutely. All clipboard history is stored <strong>locally</strong> on your device. Nothing
+                            leaves your computer except voluntary feedback.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Can I disable the extension temporarily?</span><span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Yes, use the <strong>global master switch</strong> in the popup – it stops all capture
+                            instantly without uninstalling.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>Does it capture passwords?</span><span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            No, the extension never accesses password fields. It only captures plain text from regular
+                            pages and input areas.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>How do I clear my history completely?</span><span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Click the <strong>Clear All</strong> button and confirm. That wipes every saved clipboard
+                            item.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>The extension isn’t capturing copies – what’s wrong?</span><span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Ensure the global toggle is ON (green) and the per‑tab toggle is active. Also, try
+                            refreshing the page.
+                        </div>
+                    </div>
+
+                    <div class="mt-5 text-center glass p-4">
+                        <h5>Still need help?</h5>
+                        <p>Contact us directly via email or join our Discord community.</p>
+                        <a href="mailto:support@smartclipboard.com" class="btn btn-outline-light me-2 mb-2">📧 Email
+                            Support</a>
+                        <a href="#" class="btn btn-outline-light mb-2">💬 Join Discord</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p class="mb-0">© 2026 Smart Clipboard Manager. Built with ❤️ for privacy‑focused users.</p>
+            <p class="mb-0 small">All rights reserved. Chrome and the Chrome Web Store are trademarks of Google LLC.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // FAQ toggle
+        function toggleFaq(element) {
+            const parent = element.parentElement;
+            parent.classList.toggle('active');
+            const plus = element.querySelector('span:last-child');
+            if (plus) {
+                plus.textContent = parent.classList.contains('active') ? '−' : '+';
+            }
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a.nav-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Update active class manually (Bootstrap scrollspy may take over)
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
